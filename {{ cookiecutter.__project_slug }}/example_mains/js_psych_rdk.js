@@ -127,25 +127,27 @@ const main = async (id, condition) => {
 // Here we use the condition as coherence
     let trials = []
     for (let i = 0; i < NUMBER_OF_TRIALS; i++) {
-        trials = trials.concat(trial(rand_direction(), condition));
+        trials = trials.concat(trial(rand_direction(), condition['coherence']));
     }
 
 
-// this is the timeline: instructions, pretraining, pause, training, pause, posstraining
+    // this is the timeline: instructions, pretraining, pause, training, pause, posstraining
     const timeline = [...instructions, ...trials]
 
-// run the experiment and wait it to finish
+    // run the experiment and wait it to finish
     await jsPsych.run(timeline)
 
-// calculate accuracy (this will be our observation)
+    // calculate accuracy (this will be our observation)
     const accuracy = jsPsych.data.get().filter({
         'trial_type': 'rdk',
         'correct': true
     }).count() / NUMBER_OF_TRIALS
 
 
-// return difference between before and after training as observation
-    return accuracy
+    // return difference between before and after training as observation.
+    // Here we also return the condition that belongs to the accuracy.
+    // It is best practice to return the full experiment data!
+    return JSON.stringify({condition: condition, observation: {accuracy: accuracy}})
 }
 
 
