@@ -1,14 +1,14 @@
-# Closed Loop Online Experimet
+# Closed Loop Online Experiment
 
-To establish am online closed-loop for AutoRA, there are two key components that need to be configured:
+To establish an online closed-loop for AutoRA, there are two key components that need to be configured:
 
 1. AutoRA Workflow
-    - This workflow can be executed locally, on a server, or using `Cylc`. It must have the ability to communicate with a website, allowing for writing of new conditions and reading of observation data.
-    - The AutoRA workflow can be customized by adding or removing AutoRA functions, such as AutoRA *experimentalists* or AutoRA *theorists*. It relies on an AutoRA Prolific Firebase *erunner* to collect data from a online experiment hosted via firebase and recruit participants via prolific.
+    - This workflow can be executed locally, on a server, or using `Cylc`. It must have the ability to communicate with a website, allowing for the writing of new conditions and reading of observation data.
+    - The AutoRA workflow can be customized by adding or removing AutoRA functions, such as AutoRA *experimentalists* or AutoRA *theorists*. It relies on an AutoRA Prolific Firebase *runner* to collect data from an online experiment hosted via Firebase and recruit participants via prolific.
 
 2. Website To Conduct Experiment:
     - The website serves as a platform for conducting experiments and needs to be compatible with the AutoRA workflow.
-    - In this setup, we use a `Firbase` to hosted on website.
+    - In this setup, we use `Firebase` to host on website.
 
 To simplify the setup process, we provide a `cookiecutter` template that generates a project folder containing the following two directories:
 
@@ -28,7 +28,7 @@ To serve a website via Firebase and use the Firestore Database, it is necessary 
 You'll need a [Google account](https://www.google.com/account/about/) to use Firebase.
 
 ### Firebase Project
-While logged in into your Google account head over to the [Firebase website](https://firebase.google.com/). Then create a new project:
+While logged in into your Google account, head over to the [Firebase website](https://firebase.google.com/). Then, create a new project:
 
 - Click on `Get started`.
 - Click on the plus sign with `add project`.
@@ -46,14 +46,14 @@ Now, we add a webapp to the project. Navigate to the project and follow these st
 - We will login and deploy our website later, for now, click on `Continue to console`.
 
 ### Adding Firestore To Your Project
-For the online closed loop system, we will use a Firestore Database to communicate between the AutoRA workflow and the website conducting the experiment. We will upload experiment conditions to the database and store experiment data in the database. To build a Firestore Database, follow theses steps:
+For the online closed loop system, we will use a Firestore Database to communicate between the AutoRA workflow and the website conducting the experiment. We will upload experiment conditions to the database and store experiment data in the database. To build a Firestore Database, follow these steps:
 
-- In the left-hand menu of your project console, click on `Build` and select `Firestore Database`
+- In the left-hand menu of your project console, click on `Build` and select `Firestore Database`.
 - Click on `Create database`.
 - Leave `Start in production mode` selected and click on `Next`.
 - Select a Firestore location and click on `Enable`.
 - To check if the database is set up correctly, click on the gear symbol next to the `Project overview` in the left-hand menu and select `Project settings`.
-- Under `Default GCP resource location` you should see the Firestore location that you selected.
+- Under `Default GCP resource location`, you should see the Firestore location that you selected.
   - If you don't see the location, select one now (click on the `pencil-symbol` and then on `Done` in the pop-up window).
 
 ## Set Up The Project On Your System
@@ -62,11 +62,11 @@ After setting up the project on Firebase, we will setup the project on our syste
 
 ### Prerequisite
 
-To set up an online AutoRA closed-loop you need both `Python` and `Node`.
+To set up an online AutoRA closed-loop, you need both `Python` and `Node`.
 
 You should also consider using an IDE. We recommend: 
 
-- PyCharm. This is a `Python`-specific integrated development environment which comes with useful tools 
+- PyCharm. This is a `Python`-specific integrated development environment that comes with useful tools 
   for changing the structure of `Python` code, running tests, etc. 
 - Visual Studio Code. This is a powerful general text editor with plugins to support `Python` development.
 
@@ -91,7 +91,7 @@ You should also consider using an IDE. We recommend:
 
 ### Run Cookiecutter
 
-After we have installed `Python` and `Node` and set up a virtual environment, we use the `cookiecutter`. First install it:
+After we have installed `Python` and `Node` and set up a virtual environment, we use the `cookiecutter`. First, install it:
 
 ```shell
 pip install cookiecutter
@@ -100,7 +100,8 @@ pip install cookiecutter
 Then, run `cookiecutter` and select the `basic` option. 
 
 !!! hint
-    If you select advanced, there are more features, but the instructions here focus on the basic template.
+    If you select advanced, there are more features, but the instructions here focus on the basic template. If you select advanced, make sure to also select `autora[experiment-runner-firebase-prolific]` and `set up as Firebase experiment`.
+
 
 ```shell
 cookiecutter https://github.com/AutoResearch/autora-user-cookiecutter
@@ -111,7 +112,7 @@ This command will result in two directories, `researcher_hub` and `testing_zone`
 ## Researcher Hub: AutoRA Workflow
  The `researcher_hub` contains a basic template for an AutoRA workflow. 
 
-To install the necessary dependencies, move to directory to the  and install the requirements.
+To install the necessary dependencies, move to the directory to the  and install the requirements.
 
 Move to the `researcher_hub` directory:
 ```shell
