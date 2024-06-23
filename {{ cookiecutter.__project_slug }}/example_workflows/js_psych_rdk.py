@@ -17,24 +17,64 @@ import pandas as pd
 from sklearn.linear_model import LinearRegression
 
 # *** Set up variables *** #
-# independent variable is coherence (0 - 1)
+# independent variable is coherence in percent (0 - 100)
 # dependent variable is accuracy (0 - 1)
 variables = VariableCollection(
     independent_variables=[Variable(name="coherence", allowed_values=np.linspace(0, 1, 101))],
     dependent_variables=[Variable(name="accuracy", value_range=(0, 1))])
 
-# *** Set up the theorist *** #
-# Here we use a linear regression as theorist, but you can use other theorists included in autora (for a list: https://autoresearch.github.io/autora/theorist/)
-# Or you can set up your own theorist
+# *** State *** #
+# With the variables, we can set up a state. The state object represents the state of our
+# closed loop experiment.
+
+
+state = StandardState(
+    variables=variables,
+)
+
+# *** Components/Agents *** #
+# Components are functions that run on the state. The main components are:
+# - theorist
+# - experiment-runner
+# - experimentalist
+# See more about components here: https://autoresearch.github.io/autora/
+
+
+# ** Theorist ** #
+# Here we use a linear regression as theorist, but you can use other theorists included in
+# autora (for a list: https://autoresearch.github.io/autora/theorist/)
+
 theorist = LinearRegression()
 
-# *** Set up the experimentalist *** #
-# Here we use a random sampler as experimentalist, but you can use other experimentalists included in autora (for a list:  https://autoresearch.github.io/autora/experimentalist/)
-# Or you can set up your own experimentalist
-uniform_random_rng = np.random.default_rng(seed=180)
+# To use the theorist on the state object, we wrap it with the on_state functionality and return a
+# Delta object.
+# Note: The if the input arguments of the theorist_on_state function are state-fields like
+# experiment_data, variables, ... , then using this function on a state object will automatically
+# use those state fields.
+# The output of these functions is always a Delta object. The keyword argument in this case, tells
+# the state object witch field to update.
 
-# *** Set up the runner *** #
-# Here fill in your own credentials
+
+@on_state()
+def theorist_on_state(experiment_data, variables):
+    ivs = [iv.name for iv in variables.independent_variables]
+    dvs = [dv.name for dv in variables.dependent_variables]
+    x = experiment_data[ivs]
+    y = experiment_data[dvs]
+    return Delta(models=[theorist.fit(x, y)])
+
+# ** Experimentalist ** #
+# Here, we use a random pool and use the wrapper to create a on state function
+# Note: The argument num_samples is not a state field. Instead, we will pass it in when calling
+# the function
+
+
+@on_state()
+def experimentalist_on_state(variables, num_samples):
+    return Delta(conditions=pool(variables, num_samples))
+
+# ** Experiment Runner ** #
+# We will run our experiment on firebase and need credentials. You will find them here:
 # (https://console.firebase.google.com/)
 #   -> project -> project settings -> service accounts -> generate new private key
 
@@ -57,45 +97,26 @@ experiment_runner = firebase_runner(
     time_out=100,
     sleep_time=5)
 
-# *** Set up the state *** #
-state = StandardState(
-    variables=variables,
-)
 
-
-# Set up experimentalist on state
-@on_state()
-def experimentalist_on_state(variables):
-    return Delta(conditions=pool(variables, num_samples=2))
-
-
-# Set up runner on state
+# Again, we need to wrap the runner to use it on the state. Here, we send the raw conditions.
 @on_state()
 def runner_on_state(conditions):
     data = experiment_runner(conditions)
-    # Here we need to parse what the list the experiment runner returns.
+    # Here, parse the return value of the runner. The return value depends on the specific
+    # implementation of your online experiment (see testing_zone/src/design/main.js).
+    # In this example, the experiment runner returns a list of strings, that contain json formatted
+    # dictionaries.
+    # Example:
+    # data = ['{'coherence':.3, accuracy':.8}', ...]
     result = []
     for item in data:
-        parsed_item = json.loads(item)
-        coherence = parsed_item['condition']['coherence']
-        accuracy = parsed_item['observation']['accuracy']
-        result.append({'coherence': coherence, 'accuracy': accuracy})
-
+        result.append(json.loads(item))
     return Delta(experiment_data=pd.DataFrame(result))
 
 
-# Set up theorist on state
-@on_state()
-def theorist_on_state(experiment_data, variables):
-    ivs = [iv.name for iv in variables.independent_variables]
-    dvs = [dv.name for dv in variables.dependent_variables]
-    x = experiment_data[ivs]
-    y = experiment_data[dvs]
-    return Delta(models=[theorist.fit(x, y)])
-
-
+# Now, we can run our components
 for _ in range(3):
-    state = experimentalist_on_state(state)
+    state = experimentalist_on_state(state, num_samples=2)  # Collect 2 conditions per iteration
     state = runner_on_state(state)
     state = theorist_on_state(state)
 

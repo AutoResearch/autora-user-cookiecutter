@@ -33,7 +33,8 @@ const main = async (id, condition) => {
     }
 
 
-    // For convenience, we first define a function that returns a trial (as sequence of fixation, soa, stimulus and feedback)
+    // For convenience, we first define a function that returns a trial
+    // (as sequence of fixation, soa, stimulus and feedback)
     const trial = (direction, coherence) => {
         const stimulus_timeline = []
         // FIXATION
@@ -80,20 +81,20 @@ const main = async (id, condition) => {
 
     }
 
-// Here we set up functions to randomly select words and colors
+    // Here we set up functions to randomly select a direction
 
-// create lists for colors and words
+    // create lists for colors and words
     const directions = [0, 180]
 
-// get a random color form the list
+    // get a random direction from the list
     const rand_direction = () => {
         return directions[Math.floor(Math.random() * directions.length)];
     }
 
 
-// MAKE THE EXPERIMENT TIMELINE
+    // MAKE THE EXPERIMENT TIMELINE
 
-// Instructions
+    // Instructions
     let instructions = [
         {
             type: htmlKeyboardResponse,
@@ -124,7 +125,7 @@ const main = async (id, condition) => {
     )
 
 
-// Here we use the condition as coherence
+    // Here, we use the condition to set the coherence of a trial
     let trials = []
     for (let i = 0; i < NUMBER_OF_TRIALS; i++) {
         trials = trials.concat(trial(rand_direction(), condition['coherence']));
@@ -144,10 +145,9 @@ const main = async (id, condition) => {
     }).count() / NUMBER_OF_TRIALS
 
 
-    // return difference between before and after training as observation.
-    // Here we also return the condition that belongs to the accuracy.
+    // Here, we also return the condition that belongs to the accuracy.
     // It is best practice to return the full experiment data!
-    return JSON.stringify({condition: condition, observation: {accuracy: accuracy}})
+    return JSON.stringify({condition, accuracy: accuracy})
 }
 
 

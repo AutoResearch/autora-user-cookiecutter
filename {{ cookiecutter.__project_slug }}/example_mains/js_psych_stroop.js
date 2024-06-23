@@ -134,9 +134,9 @@ const main = async (id, condition) => {
         pretraining = pretraining.concat(trial(rand_color(), rand_word(), 'pre-training'));
     }
 
-    // training
+    // training. Here we use the condition to set the number of training trials
     let training = [];
-    for (let i = 0; i < condition; i++) {
+    for (let i = 0; i < condition['n_train']; i++) {
         training = training.concat(trial(rand_color(), rand_word(), 'training'));
     }
 
@@ -165,7 +165,7 @@ const main = async (id, condition) => {
 
 
     // return difference between before and after training as observation
-    return (postTrainAcc - preTrainAcc)
+    return JSON.stringify({condition, accuracy_difference: (postTrainAcc - preTrainAcc)})
 }
 
 
