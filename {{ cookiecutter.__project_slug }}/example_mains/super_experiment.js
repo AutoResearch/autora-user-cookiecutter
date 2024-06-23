@@ -12,16 +12,19 @@ import {instructions, block, createTrialSequence, accuracyBlock} from "super-exp
  * @return {Promise<*>} (to autora: the observation (in this case the average accuracy)
  */
 const main = async (id, condition) => {
-    // Show instructions (wait till participant presses a button)
+    document.body.style.background = 'black'
+    // Show instructions
     await instructions()
     // create a trial sequence of ten trials from a single coherence (all else being randomized, but not counterbalanced)
-    const trial_sequence = createTrialSequence(10, {'coh': condition})
+    const trial_sequence = createTrialSequence(10, {'coh': condition['coherence']})
     // run the block with the created trial sequence
     const data = await block(trial_sequence)
     // calculate the accuracy from the data
-    const observation = accuracyBlock(data)
-    // return the observation
-    return await observation
+    const accuracy = accuracyBlock(data)
+    // return the accuracy
+    // we also return the condition that belongs to the accuracy.
+    // It is best practice to return the full experiment data!
+    return JSON.stringify({coherence: condition['coherence'], accuracy: accuracy})
 }
 
 export default main

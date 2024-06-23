@@ -147,7 +147,7 @@ const main = async (id, condition) => {
 
     // Here, we also return the condition that belongs to the accuracy.
     // It is best practice to return the full experiment data!
-    return JSON.stringify({condition, accuracy: accuracy})
+    return JSON.stringify({coherence: condition['coherence'] , accuracy: accuracy})
 }
 
 

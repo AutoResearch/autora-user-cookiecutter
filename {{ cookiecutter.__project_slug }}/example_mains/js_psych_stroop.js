@@ -165,7 +165,7 @@ const main = async (id, condition) => {
 
 
     // return difference between before and after training as observation
-    return JSON.stringify({condition, accuracy_difference: (postTrainAcc - preTrainAcc)})
+    return JSON.stringify({n_train:condition['n_train'], accuracy_difference: (postTrainAcc - preTrainAcc)})
 }
 
 
