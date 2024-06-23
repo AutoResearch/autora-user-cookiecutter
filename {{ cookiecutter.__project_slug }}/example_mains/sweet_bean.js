@@ -12,7 +12,7 @@ global.jsPsychHtmlKeyboardResponse = htmlKeyboardResponse
  * @returns {Promise<*>} after running the experiment for the subject return the observation in this function, it will be uploaded to autora
  */
 const main = async (id, condition) => {
-    const observation = await eval(condition + "\nrunExperiment();");
+    const observation = await eval(condition['experiment_code'] + "\nrunExperiment();");
     // Here we get the average reaction time
     const rt_array = observation.select('rt')['values']
     let sum_rt = 0;
@@ -20,7 +20,7 @@ const main = async (id, condition) => {
         sum_rt += rt_array[i];
     }
     let avg = sum_rt / rt_array.length;
-    return avg
+    return JSON.stringify({number: condition['number'], rt: avg})
 }
 
 
