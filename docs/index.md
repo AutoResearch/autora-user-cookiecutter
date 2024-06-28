@@ -129,7 +129,7 @@ You can find documentation for all parts of the AutoRA workflow in the [User Gui
 ## Testing Zone: Firebase Website
 
 The `testing_zone` contains a basic template for a website that is compatible with the [AutoRA Experimentation Manager for Firebase](https://autoresearch.github.io/autora/user-guide/experiment-runners/experimentation-managers/firebase/) and the [AutoRA Recruitment Manager for Prolific](https://autoresearch.github.io/autora/user-guide/experiment-runners/recruitment-managers/prolific/).
-You can find a complete example on how to use Prolific and Firebase here: [AutoRA Firebase Prolific Runner](https://autoresearch.github.io/autora/user-guide/experiment-runners/experiment-runners/firebase-prolific/)
+You can find a complete example on how to use Prolific and Firebase here: [AutoRA Firebase Prolific Runner](https://autoresearch.github.io/autora/user-guide/experiment-runners/firebase-prolific/)
 
 You can find documentation on how to connect the website to an AutoRA workflow, as well as how to build and deploy it in the documentation for [Firebase Integration](https://autoresearch.github.io/autora/online-experiments/firebase/)
 
