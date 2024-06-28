@@ -87,7 +87,7 @@ You should also consider using an IDE. We recommend:
     
 #### Prolific
 
-...
+To recruit participants via Prolific, you will need a Prolific account and an api token. Both can be obtained on the [Prolific website](https://www.prolific.com/). 
 
 ### Run Cookiecutter
 
