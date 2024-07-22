@@ -19,7 +19,7 @@ import htmlKeyboardResponse from '@jspsych/plugin-html-keyboard-response';
 const main = async (id, condition) => {
     const jsPsych = initJsPsych()
     condition = JSON.parse(condition)
-    console.log(condition)
+
 
     // constants
     const FIXATION_DURATION = 300

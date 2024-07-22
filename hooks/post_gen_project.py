@@ -24,7 +24,8 @@ def basic_or_advanced():
 
 
 def create_autora_hub_requirements(source_branch, requirements_file):
-    response = requests.get(f'https://raw.githubusercontent.com/AutoResearch/autora/{source_branch}/pyproject.toml')
+    response = requests.get(
+        f'https://raw.githubusercontent.com/AutoResearch/autora/{source_branch}/pyproject.toml')
     doc = parse(response.text)
 
     # Extract the list of dependencies from the 'all' section
@@ -80,7 +81,6 @@ def setup_basic(requirements_file):
     shutil.rmtree(to_remove)
 
 
-
 def create_autora_example_project():
     question_1 = [inquirer.List('firebase',
                                 message="Do you want to set up a firebase experiment? (ATTENTION: Node is required for this feature)",
@@ -101,7 +101,9 @@ def create_autora_example_project():
 
     questions = [inquirer.List('project_type',
                                message='What type of project do you want to create?',
-                               choices=['Blank', 'JsPsych - Stroop', 'JsPsych - RDK', 'SuperExperiment', 'SweetBean']
+                               choices=['Blank', 'JsPsych - Stroop', 'JsPsych - RDK',
+                                        'SuperExperiment', 'SweetBean',
+                                        'Mathematical Model Discovery']
                                )]
 
     answers = inquirer.prompt(questions)
@@ -114,6 +116,8 @@ def create_autora_example_project():
         example_file = 'super_experiment'
     if answers['project_type'] == 'SweetBean':
         example_file = 'sweet_bean'
+    if answers['project_type'] == 'Mathematical Model Discovery':
+        example_file = 'mathematical_model_discovery'
 
     shutil.move(f'example_mains/{example_file}.js', 'testing_zone/src/design/main.js')
     shutil.move(f'example_workflows/{example_file}.py', 'researcher_hub/autora_workflow.py')
