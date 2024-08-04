@@ -81,7 +81,7 @@ def setup_basic(requirements_file):
     shutil.rmtree(to_remove)
 
 
-def create_autora_example_project(requirements_file):
+def create_autora_example_project():
     question_1 = [inquirer.List('firebase',
                                 message="Do you want to set up a firebase experiment? (ATTENTION: Node is required for this feature)",
                                 choices=["yes", "no"],
@@ -116,8 +116,6 @@ def create_autora_example_project(requirements_file):
         example_file = 'super_experiment'
     if answers['project_type'] == 'SweetBean':
         example_file = 'sweet_bean'
-        with open(requirements_file, 'a') as f:
-            f.write(f'\nsweetbean')
     if answers['project_type'] == 'Mathematical Model Discovery':
         example_file = 'mathematical_model_discovery'
 
@@ -150,7 +148,7 @@ def main():
     requirements_file = os.path.join(project_directory, 'requirements.txt')
     if basic_or_advanced():
         if create_autora_hub_requirements(source_branch, requirements_file):
-            create_autora_example_project(requirements_file)
+            create_autora_example_project()
     else:
         setup_basic(requirements_file)
     clean_up()
