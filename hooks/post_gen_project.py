@@ -117,7 +117,7 @@ def create_autora_example_project(requirements_file):
     if answers['project_type'] == 'SweetBean':
         example_file = 'sweet_bean'
         with open(requirements_file, 'a') as f:
-            f.write(f'\nsweetbean}')
+            f.write(f'\nsweetbean')
     if answers['project_type'] == 'Mathematical Model Discovery':
         example_file = 'mathematical_model_discovery'
 
