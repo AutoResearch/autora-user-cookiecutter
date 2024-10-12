@@ -93,9 +93,9 @@ def create_autora_example_project(requirements_file):
     if answer['firebase'] == 'no':
         return
 
-    if not check_if_firebase_tools_installed():
-        # Install firebase-tools
-        subprocess.call(['npm', 'install', '-g', 'firebase-tools'], shell=True)
+    # if not check_if_firebase_tools_installed():
+    #     # Install firebase-tools
+    #     subprocess.call(['npm', 'install', '-g', 'firebase-tools'], shell=True)
 
     subprocess.call(['npx', 'create-react-app', 'testing_zone', '--template', 'autora-firebase'])
 
@@ -107,6 +107,8 @@ def create_autora_example_project(requirements_file):
                                )]
 
     answers = inquirer.prompt(questions)
+
+    example_file = 'basic'
 
     if answers['project_type'] == 'JsPsych - Stroop':
         example_file = 'js_psych_stroop'
