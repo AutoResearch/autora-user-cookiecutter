@@ -102,6 +102,7 @@ def create_autora_example_project(requirements_file):
     questions = [inquirer.List('project_type',
                                message='What type of project do you want to create?',
                                choices=['Blank', 'JsPsych - Stroop', 'JsPsych - RDK',
+                                        'JsPsych - Bandit',
                                         'SuperExperiment', 'SweetBean',
                                         'Mathematical Model Discovery']
                                )]
@@ -122,6 +123,11 @@ def create_autora_example_project(requirements_file):
             f.write(f'\nsweetbean')
     if answers['project_type'] == 'Mathematical Model Discovery':
         example_file = 'mathematical_model_discovery'
+    if answers['project_type'] == 'JsPsych - Bandit':
+        example_file = 'js_psych_bandit'
+        parent = os.path.join(os.getcwd(), 'testing_zone/css')
+        os.mkdir(parent)
+        shutil.move(f'example_css/js_psych_bandit.css', 'testing_zone/css/slot-machine.css')
 
     shutil.move(f'example_mains/{example_file}.js', 'testing_zone/src/design/main.js')
     shutil.move(f'example_workflows/{example_file}.py', 'researcher_hub/autora_workflow.py')
@@ -132,6 +138,8 @@ def create_autora_example_project(requirements_file):
     to_remove = os.path.join(os.getcwd(), 'example_workflows')
     shutil.rmtree(to_remove)
     to_remove = os.path.join(os.getcwd(), 'example_mains')
+    shutil.rmtree(to_remove)
+    to_remove = os.path.join(os.getcwd(), 'example_css')
     shutil.rmtree(to_remove)
     to_remove = os.path.join(os.getcwd(), 'readmes')
     shutil.rmtree(to_remove)
