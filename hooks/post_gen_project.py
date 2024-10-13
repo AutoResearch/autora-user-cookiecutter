@@ -128,6 +128,8 @@ def create_autora_example_project(requirements_file):
         parent = os.path.join(os.getcwd(), 'testing_zone/src/css')
         os.mkdir(parent)
         shutil.move(f'example_css/js_psych_bandit.css', 'testing_zone/src/css/slot-machine.css')
+        with open(requirements_file, 'a') as f:
+            f.write(f'\nautora-theorist-rnn-sindy-rl')
 
     shutil.move(f'example_mains/{example_file}.js', 'testing_zone/src/design/main.js')
     shutil.move(f'example_workflows/{example_file}.py', 'researcher_hub/autora_workflow.py')
