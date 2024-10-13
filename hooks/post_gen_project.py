@@ -125,9 +125,9 @@ def create_autora_example_project(requirements_file):
         example_file = 'mathematical_model_discovery'
     if answers['project_type'] == 'JsPsych - Bandit':
         example_file = 'js_psych_bandit'
-        parent = os.path.join(os.getcwd(), 'testing_zone/css')
+        parent = os.path.join(os.getcwd(), 'testing_zone/src/css')
         os.mkdir(parent)
-        shutil.move(f'example_css/js_psych_bandit.css', 'testing_zone/css/slot-machine.css')
+        shutil.move(f'example_css/js_psych_bandit.css', 'testing_zone/src/css/slot-machine.css')
 
     shutil.move(f'example_mains/{example_file}.js', 'testing_zone/src/design/main.js')
     shutil.move(f'example_workflows/{example_file}.py', 'researcher_hub/autora_workflow.py')
