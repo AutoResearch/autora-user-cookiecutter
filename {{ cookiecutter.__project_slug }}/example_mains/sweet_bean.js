@@ -1,5 +1,7 @@
 import { initJsPsych } from 'jspsych';
 import 'jspsych/css/jspsych.css'
+import 'sweetbean/dist/style/main.css';
+import 'sweetbean/dist/style/bandit.css';
 import htmlKeyboardResponse from '@jspsych/plugin-html-keyboard-response';
 
 global.initJsPsych = initJsPsych;
