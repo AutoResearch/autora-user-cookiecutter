@@ -18,7 +18,7 @@ import pandas as pd
 from sklearn.linear_model import LinearRegression
 import sweetbean as sb
 import sweetbean.stimulus as sb_s
-import sweetbea.variable as sb_v
+import sweetbean.variable as sb_v
 
 import sweetpea as sp
 
