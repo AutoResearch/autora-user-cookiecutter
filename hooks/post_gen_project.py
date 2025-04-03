@@ -4,6 +4,7 @@ import requests
 from tomlkit import parse
 import inquirer
 import shutil
+import json
 
 
 def clean_up():
@@ -81,7 +82,7 @@ def setup_basic(requirements_file):
     shutil.rmtree(to_remove)
 
 
-def create_autora_example_project(requirements_file):
+def create_autora_example_project(requirements_file, npm_package_file=None):
     question_1 = [inquirer.List('firebase',
                                 message="Do you want to set up a firebase experiment? (ATTENTION: Node is required for this feature)",
                                 choices=["yes", "no"],
@@ -101,7 +102,8 @@ def create_autora_example_project(requirements_file):
 
     questions = [inquirer.List('project_type',
                                message='What type of project do you want to create?',
-                               choices=['Blank', 'JsPsych - Stroop', 'JsPsych - RDK',
+                               choices=['Blank', 'Double Sweet',
+                                        'JsPsych - Stroop', 'JsPsych - RDK',
                                         'JsPsych - Bandit',
                                         'SuperExperiment', 'SweetBean',
                                         'Mathematical Model Discovery']
@@ -121,6 +123,21 @@ def create_autora_example_project(requirements_file):
         example_file = 'sweet_bean'
         with open(requirements_file, 'a') as f:
             f.write(f'\nsweetbean')
+    if answers['project_type'] == 'Double Sweet':
+        example_file = 'double_sweet'
+        # add dependency to requirements.txt
+        with open(requirements_file, 'a') as f:
+            f.write(f'\nsweetbean')
+            f.write(f'\nsweetpea')
+        # add dependency to package.json
+        with open(npm_package_file, 'r') as f:
+            package_json = json.load(f)
+        package_json['dependencies']['@jspsych-contrib/plugin-rok'] = '^1.1.1'
+        package_json['dependencies']['jspsych'] = '^7.3.1'
+        package_json['dependencies']['sweetbean'] = '^0.0.7'
+        with open(npm_package_file, 'w') as f:
+            json.dump(package_json, f, indent=2)
+
     if answers['project_type'] == 'Mathematical Model Discovery':
         example_file = 'mathematical_model_discovery'
     if answers['project_type'] == 'JsPsych - Bandit':
@@ -159,7 +176,9 @@ def check_if_firebase_tools_installed():
 def main():
     source_branch = 'main'
     project_directory = os.path.join(os.path.realpath(os.path.curdir), 'researcher_hub')
+    testing_zone = os.path.join(os.path.realpath(os.path.curdir), 'testing_zone')
     requirements_file = os.path.join(project_directory, 'requirements.txt')
+    npm_package_file = os.path.join(testing_zone, 'package.json')
     if basic_or_advanced():
         if create_autora_hub_requirements(source_branch, requirements_file):
             create_autora_example_project(requirements_file)

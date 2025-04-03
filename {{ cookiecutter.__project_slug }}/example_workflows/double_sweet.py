@@ -16,15 +16,18 @@ from autora.state import StandardState, on_state, Delta
 import numpy as np
 import pandas as pd
 from sklearn.linear_model import LinearRegression
-from sweetbean import Block, Experiment
-from sweetbean.stimulus import Text
+import sweetbean as sb
+import sweetbean.stimulus as sb_s
+import sweetbea.variable as sb_v
+
+import sweetpea as sp
 
 # *** Set up variables *** #
 # independent variable is coherence in percent (0 - 100)
 # dependent variable is rt in ms (0 - 10000)
 variables = VariableCollection(
     independent_variables=[Variable(name="number", allowed_values=np.linspace(0, 40, 41))],
-    dependent_variables=[Variable(name="rt", value_range=(0, 10000))])
+    dependent_variables=[Variable(name="rt", value_range=(0, 10000))],)
 
 # *** State *** #
 # With the variables, we can set up a state. The state object represents the state of our
@@ -84,7 +87,8 @@ def experimentalist_on_state(variables, num_samples):
 # (https://console.firebase.google.com/)
 #   -> project -> project settings -> service accounts -> generate new private key
 
-firebase_credentials = {"type": "type",
+firebase_credentials = {
+  "type": "type",
   "project_id": "project_id-tst",
   "private_key_id": "private_key_id",
   "private_key": "private_key",
@@ -96,6 +100,7 @@ firebase_credentials = {"type": "type",
   "client_x509_cert_url": "client_x509_cert_url",
   "universe_domain": "universe_domain"
 }
+
 
 # simple experiment runner that runs the experiment on firebase
 experiment_runner = firebase_runner(
@@ -115,12 +120,12 @@ def runner_on_state(conditions):
         # we use sweetbean to create a full experiment from the numbers
 
         # For more information on sweetbean: https://autoresearch.github.io/sweetbean/
-        text = Text(
+        text = sb_s.Text(
             duration=10000, text=f"press a if {number} is larger then 20, b if not.",
             color="purple", choices=["a", "b"]
         )
-        block = Block([text])
-        experiment = Experiment([block])
+        block = sb.Block([text])
+        experiment = sb.Experiment([block])
         # here we export the experiment as javascript function
         condition = experiment.to_js_string(as_function=True, is_async=True)
         res.append(condition)
