@@ -181,7 +181,7 @@ def main():
     npm_package_file = os.path.join(testing_zone, 'package.json')
     if basic_or_advanced():
         if create_autora_hub_requirements(source_branch, requirements_file):
-            create_autora_example_project(requirements_file)
+            create_autora_example_project(requirements_file, npm_package_file)
     else:
         setup_basic(requirements_file)
     clean_up()
