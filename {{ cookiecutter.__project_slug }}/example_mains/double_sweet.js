@@ -2,14 +2,17 @@ import {initJsPsych} from 'jspsych';
 import 'jspsych/css/jspsych.css'
 import 'sweetbean/dist/style/main.css';
 import 'sweetbean/dist/style/bandit.css';
+import 'sweetbean/dist/style/touch-buttons.css'
 import * as SweetBeanRuntime from 'sweetbean/dist/runtime';
 
 import htmlKeyboardResponse from '@jspsych/plugin-html-keyboard-response';
 import jsPsychRok from '@jspsych-contrib/plugin-rok';
+import jsPsychExtensionTouchscreenButtons from '@jspsych-contrib/extension-touchscreen-buttons'
 
 global.initJsPsych = initJsPsych;
 global.jsPsychHtmlKeyboardResponse = htmlKeyboardResponse
 global.jsPsychRok = jsPsychRok
+global.jsPsychExtensionTouchscreenButtons = jsPsychExtensionTouchscreenButtons
 
 Object.entries(SweetBeanRuntime).forEach(([key, value]) => {
     global[key] = value;

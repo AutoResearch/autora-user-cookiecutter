@@ -133,8 +133,10 @@ def create_autora_example_project(requirements_file, npm_package_file=None):
         with open(npm_package_file, 'r') as f:
             package_json = json.load(f)
         package_json['dependencies']['@jspsych-contrib/plugin-rok'] = '^1.1.1'
+        package_json['dependencies']['@jspsych-contrib/extension-touchscreen-buttons'] = '^1.0.0'
         package_json['dependencies']['jspsych'] = '^7.3.1'
-        package_json['dependencies']['sweetbean'] = '^0.0.7'
+        package_json['dependencies']['sweetbean'] = '^0.0.8'
+
         with open(npm_package_file, 'w') as f:
             json.dump(package_json, f, indent=2)
 

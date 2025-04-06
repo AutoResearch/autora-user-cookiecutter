@@ -1,11 +1,3 @@
-"""
-Basic Workflow
-    Single condition Variable (0-1), Single Observation Variable(0-1)
-    Theorist: LinearRegression
-    Experimentalist: Random Sampling
-    Runner: Firebase Runner (no prolific recruitment)
-"""
-
 import json
 
 from autora.variable import VariableCollection, Variable
@@ -16,23 +8,23 @@ from autora.state import StandardState, on_state, Delta
 import numpy as np
 import pandas as pd
 from sklearn.linear_model import LinearRegression
-import sweetbean as sb
-import sweetbean.stimulus as sb_s
-import sweetbean.variable as sb_v
 
-import sweetpea as sp
+from sweetpea import Factor, DerivedLevel, CrossBlock, synthesize_trials, experiments_to_dicts, WithinTrial
+
+from sweetbean.stimulus import Fixation, ROK, Feedback
+from sweetbean.variable import FunctionVariable, TimelineVariable
+from sweetbean import Block, Experiment
 
 # *** Set up variables *** #
-# independent variable is coherence in percent (0 - 100)
-# dependent variable is rt in ms (0 - 10000)
+# TODO: Declare your ivs and dvs here
 variables = VariableCollection(
-    independent_variables=[Variable(name="number", allowed_values=np.linspace(0, 40, 41))],
-    dependent_variables=[Variable(name="rt", value_range=(0, 10000))],)
+    independent_variables=[
+        Variable(name=..., allowed_values=...)
+    ],
+    dependent_variables=[
+        Variable(name=..., value_range=(..., ...))],)
 
 # *** State *** #
-# With the variables, we can set up a state. The state object represents the state of our
-# closed loop experiment.
-
 
 state = StandardState(
     variables=variables,
@@ -72,7 +64,7 @@ def theorist_on_state(experiment_data, variables):
 
 
 # ** Experimentalist ** #
-# Here, we use a random pool and use the wrapper to create a on state function
+# Here, we use a random pool and use the wrapper to create an on state function
 # Note: The argument num_samples is not a state field. Instead, we will pass it in when calling
 # the function
 
@@ -112,33 +104,37 @@ experiment_runner = firebase_runner(
 # Again, we need to wrap the runner to use it on the state. Here, we send the raw conditions.
 @on_state()
 def runner_on_state(conditions):
-    # Here, we convert conditions into sweet bean code to send the complete experiment code
-    # directly to the server
-    numbers = list(conditions['number'])
-    res = []
-    for number in numbers:
-        # we use sweetbean to create a full experiment from the numbers
+    experiments = []
+    for _, row in conditions.iterrows():
+        # SweetPea - Experiment design
 
-        # For more information on sweetbean: https://autoresearch.github.io/sweetbean/
-        text = sb_s.Text(
-            duration=10000, text=f"press a if {number} is larger then 20, b if not.",
-            color="purple", choices=["a", "b"]
-        )
-        block = sb.Block([text])
-        experiment = sb.Experiment([block])
-        # here we export the experiment as javascript function
-        condition = experiment.to_js_string(as_function=True, is_async=True)
-        res.append(condition)
-    # We append a column (experiment_code) to the conditions and send it to the runner
+        # TODO: Implement you design here
+
+        design = []
+        crossing = []
+        constraints = []
+
+        cross_block = CrossBlock(design, crossing, constraints)
+        _timelines = synthesize_trials(cross_block, 1)
+        timelines = experiments_to_dicts(cross_block, _timelines)
+
+
+        # SweetPea - Stimulus Sequence
+
+        seq = [
+            #TODO: Implement your stimulus sequence here
+        ]
+
+        for timline in timelines:
+            block = Block(seq, timline)
+            experiment = Experiment([block]).to_js_string()
+            experiments.append(experiment)
+
     conditions_to_send = conditions.copy()
-    conditions_to_send['experiment_code'] = res
+    conditions_to_send['experiment_code'] = experiments
     data = experiment_runner(conditions_to_send)
-    # Here, parse the return value of the runner. The return value depends on the specific
-    # implementation of your online experiment (see testing_zone/src/design/main.js).
-    # In this example, the experiment runner returns a list of strings, that contain json formatted
-    # dictionaries.
-    # Example:
-    # data = ['{'number':4, rt':.8}', ...]
+
+    # TODO: Implement your data processing here (raw data -> condition, observation pairs
     result = []
     for item in data:
         result.append(json.loads(item))
