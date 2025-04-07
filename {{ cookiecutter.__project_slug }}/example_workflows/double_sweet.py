@@ -14,6 +14,8 @@ from sweetpea import Factor, DerivedLevel, CrossBlock, synthesize_trials, experi
 from sweetbean.stimulus import Fixation, ROK, Feedback
 from sweetbean.variable import FunctionVariable, TimelineVariable
 from sweetbean import Block, Experiment
+from sweetbean.extension import TouchButton
+from sweetbean.util.data_process import process_autora
 
 # *** Set up variables *** #
 # TODO: Declare your ivs and dvs here
@@ -97,7 +99,7 @@ firebase_credentials = {
 # simple experiment runner that runs the experiment on firebase
 experiment_runner = firebase_runner(
     firebase_credentials=firebase_credentials,
-    time_out=100,
+    time_out=30,
     sleep_time=5)
 
 
@@ -133,28 +135,51 @@ def runner_on_state(conditions):
     conditions_to_send = conditions.copy()
     conditions_to_send['experiment_code'] = experiments
     data = experiment_runner(conditions_to_send)
+    data = process_autora(data, len(seq))
+    df = pd.DataFrame(data)
 
-    # TODO: Implement your data processing here (raw data -> condition, observation pairs
-    result = []
-    for item in data:
-        result.append(json.loads(item))
-    return Delta(experiment_data=pd.DataFrame(result))
+    # TODO: Implement your data processing here (raw data -> condition, observation pairs)
+
+
+
+    # Fill this with ivs and dvs
+    summary = pd.DataFrame({
+
+
+    })
+
+    # TODO: Implement your data processing here (raw data -> condition, observation pairs)
+    return Delta(experiment_data=summary)
+
+
+
+def report_linear_fit(model: LinearRegression, precision=4):
+    coefs = model.coef_.flatten()
+    intercept = np.round(model.intercept_, precision)[0]
+    terms = []
+
+    for i, coef in enumerate(coefs):
+        name = variables.independent_variables[i].name
+        rounded_coef = np.round(coef, precision)
+        terms.append(f"{rounded_coef}·{name}")
+
+    formula = " + ".join(terms)
+    sign = "+" if intercept >= 0 else "-"
+    return f"{variables.dependent_variables[0].name} = {formula} {sign} {abs(intercept)}"
 
 
 # Now, we can run our components
-for _ in range(3):
+for cycle in range(3):
+    print(f'Starting cycle {cycle}')
     state = experimentalist_on_state(state, num_samples=2)  # Collect 2 conditions per iteration
     state = runner_on_state(state)
     state = theorist_on_state(state)
+    print(state.experiment_data)
+    state.experiment_data.to_csv(f'experiment_data_{cycle}.csv')
 
-
-# *** Report the data *** #
-# If you changed the theorist, also change this part
-def report_linear_fit(m: LinearRegression, precision=4):
-    s = f"y = {np.round(m.coef_[0].item(), precision)} x " \
-        f"+ {np.round(m.intercept_.item(), 4)}"
-    return s
-
-
-print(report_linear_fit(state.models[0]))
-print(report_linear_fit(state.models[-1]))
+    print()
+    print('*' * 20)
+    print(f'Model in cycle {cycle}:')
+    print(report_linear_fit(state.models[-1]))
+    print('*' * 20)
+    print()
