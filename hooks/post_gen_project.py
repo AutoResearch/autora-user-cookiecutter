@@ -68,6 +68,7 @@ def setup_basic(requirements_file):
     subprocess.call(['npx', 'create-react-app', 'testing_zone', '--template', 'autora-firebase'])
     with open(requirements_file, 'a') as f:
         f.write('\nautora')
+
     shutil.move(f'example_mains/basic.js', 'testing_zone/src/design/main.js')
     shutil.move(f'example_workflows/basic.py', 'researcher_hub/autora_workflow.py')
     shutil.move(f'readmes/README_AUTORA.md', 'researcher_hub/README.md')
@@ -80,6 +81,8 @@ def setup_basic(requirements_file):
     shutil.rmtree(to_remove)
     to_remove = os.path.join(os.getcwd(), 'readmes')
     shutil.rmtree(to_remove)
+
+
 
 
 def create_autora_example_project(requirements_file, npm_package_file=None):
@@ -150,6 +153,7 @@ def create_autora_example_project(requirements_file, npm_package_file=None):
         with open(requirements_file, 'a') as f:
             f.write(f'\nautora-theorist-rnn-sindy-rl')
 
+    shutil.move(f'firebase_setup.sh', 'testing_zone/firebase_setup.sh')
     shutil.move(f'example_mains/{example_file}.js', 'testing_zone/src/design/main.js')
     shutil.move(f'example_workflows/{example_file}.py', 'researcher_hub/autora_workflow.py')
     shutil.move(f'readmes/README_AUTORA.md', 'researcher_hub/README.md')
@@ -164,6 +168,17 @@ def create_autora_example_project(requirements_file, npm_package_file=None):
     shutil.rmtree(to_remove)
     to_remove = os.path.join(os.getcwd(), 'readmes')
     shutil.rmtree(to_remove)
+
+    firebase_script_path = os.path.join('testing_zone', 'firebase_setup.sh')
+    subprocess.call(['chmod', '+x', firebase_script_path])
+
+    # Prompt user for project ID
+    project_id = input("Enter your Firebase project ID:").strip()
+
+    # Run the setup script from inside testing_zone
+    if project_id and project_id not in ['', 'no', 'n', 'None', None]:
+        # Call the firebase_setup.sh script with the project ID
+        subprocess.call(['./firebase_setup.sh', project_id], cwd='testing_zone')
 
 
 def check_if_firebase_tools_installed():
