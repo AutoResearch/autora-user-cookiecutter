@@ -81,19 +81,8 @@ def experimentalist_on_state(variables, num_samples):
 # (https://console.firebase.google.com/)
 #   -> project -> project settings -> service accounts -> generate new private key
 
-firebase_credentials = {
-  "type": "type",
-  "project_id": "project_id-tst",
-  "private_key_id": "private_key_id",
-  "private_key": "private_key",
-  "client_email": "client_email",
-  "client_id": "client_id",
-  "auth_uri": "auth_uri",
-  "token_uri": "token_uri",
-  "auth_provider_x509_cert_url": "auth_provider_x509_cert_url",
-  "client_x509_cert_url": "client_x509_cert_url",
-  "universe_domain": "universe_domain"
-}
+with open('firebase_credentials.json') as f:
+    firebase_credentials = json.load(f)
 
 
 # simple experiment runner that runs the experiment on firebase
