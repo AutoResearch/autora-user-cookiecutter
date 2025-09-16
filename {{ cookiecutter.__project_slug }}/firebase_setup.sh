@@ -14,11 +14,11 @@ FIREBASE_CONFIG_FILE="firebase-config.js"
 echo "📌 Using project ID: $PROJECT_ID"
 
 # --- VALIDATE PROJECT ID ---
-if [[ ! "$PROJECT_ID" =~ ^[a-z][a-z0-9-]{4,28}[a-z0-9]$ ]]; then
+while [[ ! "$PROJECT_ID" =~ ^[a-z][a-z0-9-]{4,28}[a-z0-9]$ ]]; do
   echo "❌ Invalid project_id: '$PROJECT_ID'"
   echo "✅ Must be 6–30 characters, lowercase letters, digits, or hyphens. No uppercase."
-  exit 1
-fi
+  read -p "Please enter a valid project ID: " PROJECT_ID
+done
 
 # --- LOGIN TO GCLOUD + FIREBASE ---
 
