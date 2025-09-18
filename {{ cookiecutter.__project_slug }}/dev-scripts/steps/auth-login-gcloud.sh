@@ -8,10 +8,10 @@ ensure_gcloud_account() {
   if [ -z "$active" ]; then
     if is_headless; then
       echo "Opening device login for gcloud (headless)..."
-      gcloud auth application-default login --no-launch-browser
+      gcloud auth login --no-launch-browser
     else
       read -r -p "Press Enter to log in to gcloud..." _
-      gcloud auth application-default login
+      gcloud auth login
     fi
   fi
 }
