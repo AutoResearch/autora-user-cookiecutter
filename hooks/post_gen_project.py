@@ -154,6 +154,7 @@ def create_autora_example_project(requirements_file, npm_package_file=None):
             f.write(f'\nautora-theorist-rnn-sindy-rl')
 
     shutil.move(f'firebase_setup.sh', 'testing_zone/firebase_setup.sh')
+    shutil.move(f'dev-scripts', 'testing_zone/dev-scripts')
     shutil.move(f'example_mains/{example_file}.js', 'testing_zone/src/design/main.js')
     shutil.move(f'example_workflows/{example_file}.py', 'researcher_hub/autora_workflow.py')
     shutil.move(f'readmes/README_AUTORA.md', 'researcher_hub/README.md')
@@ -179,6 +180,10 @@ def create_autora_example_project(requirements_file, npm_package_file=None):
     if project_id and project_id not in ['', 'no', 'n', 'None', None]:
         # Call the firebase_setup.sh script with the project ID
         subprocess.call(['./firebase_setup.sh', project_id], cwd='testing_zone')
+
+    # remove dev-scripts and firebase_setup.sh to clean up
+    os.remove(os.path.join('testing_zone', 'firebase_setup.sh'))
+    shutil.rmtree(os.path.join('testing_zone', 'dev-scripts'))
 
 
 def check_if_firebase_tools_installed():
