@@ -2,8 +2,8 @@
 set -euo pipefail
 
 SCRIPT_DIR="$(cd -- "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd)"
-source "$SCRIPT_DIR/scripts/config.env"
-source "$SCRIPT_DIR/scripts//lib/common.sh"
+source "$SCRIPT_DIR/dev-scripts/config.env"
+source "$SCRIPT_DIR/dev-scripts//lib/common.sh"
 
 PROJECT_ID="${1:-${PROJECT_ID:-autora}}"
 
@@ -19,17 +19,17 @@ export PROJECT_ID DISPLAY_NAME WEBAPP_NAME REGION BUILD_DIR SERVICE_ACCOUNT_KEY_
 
 # Execute steps in order
 
-bash "$SCRIPT_DIR/scripts/steps/bootstrap-tools.sh"
-bash "$SCRIPT_DIR/scripts/steps/auth-login-firebase.sh"
-bash "$SCRIPT_DIR/scripts/steps/project-ensure.sh"
-bash "$SCRIPT_DIR/scripts/steps/auth-login-gcloud.sh"
-bash "$SCRIPT_DIR/scripts/steps/write-firebaserc.sh"
-bash "$SCRIPT_DIR/scripts/steps/webapp-ensure.sh"
-bash "$SCRIPT_DIR/scripts/steps/export-sdk-config.sh"
-bash "$SCRIPT_DIR/scripts/steps/write-env-from-sdk.sh"
-bash "$SCRIPT_DIR/scripts/steps/admin-key.sh"
-bash "$SCRIPT_DIR/scripts/steps/firestore-ensure.sh"
-bash "$SCRIPT_DIR/scripts/steps/hosting-config.sh"
-bash "$SCRIPT_DIR/scripts/steps/build-and-deploy.sh"
+bash "$SCRIPT_DIR/dev-scripts/steps/bootstrap-tools.sh"
+bash "$SCRIPT_DIR/dev-scripts/steps/auth-login-firebase.sh"
+bash "$SCRIPT_DIR/dev-scripts/steps/project-ensure.sh"
+bash "$SCRIPT_DIR/dev-scripts/steps/auth-login-gcloud.sh"
+bash "$SCRIPT_DIR/dev-scripts/steps/write-firebaserc.sh"
+bash "$SCRIPT_DIR/dev-scripts/steps/webapp-ensure.sh"
+bash "$SCRIPT_DIR/dev-scripts/steps/export-sdk-config.sh"
+bash "$SCRIPT_DIR/dev-scripts/steps/write-env-from-sdk.sh"
+bash "$SCRIPT_DIR/dev-scripts/steps/admin-key.sh"
+bash "$SCRIPT_DIR/dev-scripts/steps/firestore-ensure.sh"
+bash "$SCRIPT_DIR/dev-scripts/steps/hosting-config.sh"
+bash "$SCRIPT_DIR/dev-scripts/steps/build-and-deploy.sh"
 
 echo "🎉 All steps completed."
