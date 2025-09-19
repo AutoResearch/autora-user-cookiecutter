@@ -3,7 +3,8 @@ set -euo pipefail
 
 # Assumes: PROJECT_ID and SCRIPT_DIR are already defined earlier
 : "${PROJECT_ID:?PROJECT_ID must be set}"
-: "${SCRIPT_DIR:?SCRIPT_DIR must be set}"
+SCRIPT_DIR="$(cd -- "$(dirname "${BASH_SOURCE[0]}")/.." &>/dev/null && pwd)"
+
 
 export CLOUDSDK_CORE_PROJECT="$PROJECT_ID"
 export CLOUDSDK_CORE_DISABLE_PROMPTS=1
@@ -50,7 +51,8 @@ say "✅ Using service account: ${SA_EMAIL}"
 
 # ---- Output path: parent_of_script_dir/research_hub/firebase_credentials.json ----
 PARENT_DIR="$(dirname "$SCRIPT_DIR")"
-OUT_FILE="${PARENT_DIR}/research_hub/firebase_credentials.json"
+GRANDPARENT_DIR="$(dirname "$PARENT_DIR")"
+OUT_FILE="${GRANDPARENT_DIR}/research_hub/firebase_credentials.json"
 mkdir -p "$(dirname "$OUT_FILE")"
 
 # Optional: ensure we overwrite the file cleanly
