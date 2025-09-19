@@ -52,7 +52,7 @@ say "✅ Using service account: ${SA_EMAIL}"
 # ---- Output path: parent_of_script_dir/research_hub/firebase_credentials.json ----
 PARENT_DIR="$(dirname "$SCRIPT_DIR")"
 GRANDPARENT_DIR="$(dirname "$PARENT_DIR")"
-OUT_FILE="${GRANDPARENT_DIR}/research_hub/firebase_credentials.json"
+OUT_FILE="${GRANDPARENT_DIR}/researcher_hub/firebase_credentials.json"
 mkdir -p "$(dirname "$OUT_FILE")"
 
 # Optional: ensure we overwrite the file cleanly
