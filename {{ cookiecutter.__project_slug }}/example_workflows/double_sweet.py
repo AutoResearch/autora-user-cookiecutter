@@ -11,7 +11,7 @@ from sklearn.linear_model import LinearRegression
 
 from sweetpea import Factor, DerivedLevel, CrossBlock, synthesize_trials, experiments_to_dicts, WithinTrial
 
-from sweetbean.stimulus import Fixation, ROK, Feedback
+from sweetbean.stimulus import Fixation, ROK, Feedback, Text
 from sweetbean.variable import FunctionVariable, TimelineVariable
 from sweetbean import Block, Experiment
 from sweetbean.extension import TouchButton
